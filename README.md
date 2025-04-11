@@ -72,3 +72,31 @@ DeviceNetworkEvents
 | where InitiatingProcessFileName in~ ("rkfree.exe", "revealer.exe")
 | where RemoteUrl contains "logixoft" or RemoteIP != ""
 | project Timestamp, DeviceName, InitiatingProcessAccountName, RemoteUrl, RemoteIP, RemotePort
+
+# Threat Event (Unauthorized Keylogger Installation)  
+**Unauthorized Revealer Keylogger Installation via Microsoft Edge by User `nealthreatvm`**
+
+
+---
+
+Created By:
+Author Name: Montell Ricks
+Author Contact: [Your LinkedIn or GitHub]
+Date: April 11, 2025
+
+Validated By:
+Reviewer Name:
+Reviewer Contact:
+Validation Date:
+
+Additional Notes:
+Revealer Keylogger typically installs to:
+C:\Users\nealthreatvm\AppData\Roaming\RKL\revealer.exe
+
+It can run silently and may not appear in the taskbar.
+
+Activity was fully contained within the virtual machine, and the system has since been isolated for forensics.
+
+Revision History:
+Version	Changes	Date	Modified By
+1.0	Initial draft with timeline	April 11, 2025	Montell Ricks
