@@ -43,59 +43,32 @@ On April 11, 2025, IT detected suspicious outbound connections from a VM registe
 
 ## Related Queries:
 ```kql
-// Detect download of Revealer Keylogger installer by nealthreatvm
+// Detect download of Revealer Keylogger installer by nealthreatvm on device nealthreatvm
 DeviceFileEvents
+| where DeviceName == "nealthreatvm"
 | where FileName =~ "rkfree.exe"
 | where InitiatingProcessFileName == "msedge.exe"
 | where InitiatingProcessAccountName == "nealthreatvm"
 | project Timestamp, DeviceName, FileName, FolderPath, ActionType, InitiatingProcessCommandLine
 
-// Detect rkfree.exe execution or Revealer Keylogger installed by nealthreatvm
+// Detect rkfree.exe execution or Revealer Keylogger launched by nealthreatvm on device nealthreatvm
 DeviceProcessEvents
+| where DeviceName == "nealthreatvm"
 | where AccountName == "nealthreatvm"
 | where FileName in~ ("rkfree.exe", "revealer.exe")
 | project Timestamp, DeviceName, AccountName, FileName, FolderPath, ProcessCommandLine
 
-// Detect log files or folders created/deleted by Revealer Keylogger
+// Detect log file creation or folder deletion related to Revealer Keylogger
 DeviceFileEvents
+| where DeviceName == "nealthreatvm"
 | where AccountName == "nealthreatvm"
 | where FolderPath has "AppData\\Roaming\\RKL" or FileName contains "log"
 | project Timestamp, DeviceName, ActionType, FileName, FolderPath
 
-// Detect outbound connection to suspicious or unexpected domains
+// Detect outbound connections made by Revealer Keylogger from device nealthreatvm
 DeviceNetworkEvents
+| where DeviceName == "nealthreatvm"
 | where InitiatingProcessAccountName == "nealthreatvm"
-| where InitiatingProcessFileName in~ ("rkfree.exe", "revealer.exe")
-| where RemoteUrl contains "logixoft" or RemoteIP != ""
-| project Timestamp, DeviceName, InitiatingProcessAccountName, RemoteUrl, RemoteIP, RemotePort
-
-Created By:
-Author Name: Montell Ricks
-
-Author Contact: [Your LinkedIn or GitHub]
-
-Date: April 11, 2025
-
-Validated By:
-Reviewer Name:
-
-Reviewer Contact:
-
-Validation Date:
-
-Additional Notes:
-Revealer Keylogger typically installs to:
-C:\Users\nealthreatvm\AppData\Roaming\RKL\revealer.exe
-
-It can run silently and may not appear in the taskbar.
-
-Activity was fully contained within the virtual machine, and the system has since been isolated for forensics.
-
-Revision History:
-Version	Changes	Date	Modified By
-1.0	Initial draft with timeline	April 11, 2025	Montell Ricks
-// Detect outbound connections made by the keylogger
-DeviceNetworkEvents
 | where InitiatingProcessFileName in~ ("rkfree.exe", "revealer.exe")
 | where RemoteUrl contains "logixoft" or RemoteIP != ""
 | project Timestamp, DeviceName, InitiatingProcessAccountName, RemoteUrl, RemoteIP, RemotePort
